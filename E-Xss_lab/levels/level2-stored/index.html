@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<title>Level 2 | Stored XSS</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+<div class="level-page">
+  <div class="level-header">
+    <a href="../../levels.html" class="back">← Səviyyələr</a>
+    <h1 id="levelTitle">Level 2.1 — Comment XSS</h1>
+    <span class="tag">STORED</span><span class="tag">PERSISTENT</span>
+  </div>
+
+  <div class="sub-nav">
+    <button onclick="showSub('2.1')" id="btn21" class="sub-btn active">2.1</button>
+    <button onclick="showSub('2.2')" id="btn22" class="sub-btn locked" disabled>2.2 🔒</button>
+  </div>
+
+  <div id="sub21" class="sub-level">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 2.1</h3>
+      <p>Şərh yaz ki, <code>alert(1)</code> işə düşsün</p>
+    </div>
+    <div class="playground">
+      <input id="cAuthor" placeholder="Adın">
+      <textarea id="cBody" rows="3" placeholder="Şərhin..."></textarea>
+      <button onclick="postComment()">Göndər</button>
+      <button onclick="FakeDB.clear('comments');location.reload()" style="background:var(--pink);margin-left:10px">Təmizlə</button>
+    </div>
+    <div id="comments" class="comments" style="margin-top:20px"></div>
+  </div>
+
+  <div id="sub22" class="sub-level" style="display:none">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 2.2</h3>
+      <p>Profil yarat və XSS payload əlavə et</p>
+    </div>
+    <div class="playground">
+      <input id="pName" placeholder="Ad">
+      <textarea id="pBio" rows="3" placeholder="Haqqında..."></textarea>
+      <button onclick="saveProfile()">Saxla</button>
+    </div>
+    <div class="profile-display" style="margin-top:20px">
+      <div class="field"><div class="field-label">AD:</div><div id="dName" class="field-value">—</div></div>
+      <div class="field"><div class="field-label">HAQQINDA:</div><div id="dBio" class="field-value">—</div></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.sub-nav{margin:20px 0;padding:15px;background:rgba(0,255,156,.05);border-radius:8px;text-align:center}
+.sub-btn{background:rgba(0,255,156,.1);border:1px solid var(--neon);color:var(--neon);padding:10px 25px;border-radius:6px;cursor:pointer;margin:0 10px;font-size:1rem;transition:.3s}
+.sub-btn:hover:not(:disabled),.sub-btn.active{background:var(--neon);color:#000}
+.sub-btn:disabled{opacity:.3;cursor:not-allowed;border-color:var(--muted);color:var(--muted)}
+.sub-level{animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+<script src="../../shared/utils.js"></script>
+<script src="../../shared/fake-db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

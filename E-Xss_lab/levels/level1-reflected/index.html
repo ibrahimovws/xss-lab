@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<title>Level 1 | Reflected XSS</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+<div class="level-page">
+  <div class="level-header">
+    <a href="../../levels.html" class="back">← Səviyyələr</a>
+    <h1 id="levelTitle">Level 1.1 — Sadə Reflected XSS</h1>
+    <span class="tag">REFLECTED</span><span class="tag">EASY</span>
+  </div>
+
+  <div class="sub-nav">
+    <button onclick="showSub('1.1')" id="btn11" class="sub-btn active">1.1</button>
+    <button onclick="showSub('1.2')" id="btn12" class="sub-btn locked" disabled>1.2 🔒</button>
+  </div>
+
+  <div id="sub11" class="sub-level">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 1.1</h3>
+      <p>Axtarış sahəsinə XSS payload yaz ki, <code>alert(1)</code> işə düşsün.</p>
+    </div>
+    <div class="playground">
+      <input id="search" placeholder="Bir şey axtar...">
+      <button onclick="doSearch()">Axtar</button>
+      <div class="output">
+        <div class="output-label">NƏTİCƏ:</div>
+        <div id="result">Nəticə burada...</div>
+      </div>
+    </div>
+    <details class="hint-box">
+      <summary>💡 İpucu</summary>
+      <p><code>&lt;img src=x onerror=alert(1)&gt;</code> və ya <code>&lt;script&gt;alert(1)&lt;/script&gt;</code></p>
+    </details>
+  </div>
+
+  <div id="sub12" class="sub-level" style="display:none">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 1.2</h3>
+      <p>URL parametrindən istifadə et: <code>?name=PAYLOAD</code></p>
+    </div>
+    <div class="playground">
+      <div class="output">
+        <div class="output-label">SALAMLAMA:</div>
+        <div id="greeting">URL-də name parametri yoxdur</div>
+      </div>
+      <p style="margin-top:15px;color:var(--muted)">💡 İpucu: URL-in sonuna <code>?name=&lt;script&gt;alert(1)&lt;/script&gt;</code> əlavə et</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.sub-nav{margin:20px 0;padding:15px;background:rgba(0,255,156,.05);border-radius:8px;text-align:center}
+.sub-btn{background:rgba(0,255,156,.1);border:1px solid var(--neon);color:var(--neon);padding:10px 25px;border-radius:6px;cursor:pointer;margin:0 10px;font-size:1rem;transition:.3s}
+.sub-btn:hover:not(:disabled),.sub-btn.active{background:var(--neon);color:#000}
+.sub-btn:disabled{opacity:.3;cursor:not-allowed;border-color:var(--muted);color:var(--muted)}
+.sub-level{animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+<script src="../../shared/utils.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

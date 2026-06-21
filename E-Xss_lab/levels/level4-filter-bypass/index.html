@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<title>Level 4 | Filter Bypass</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+<div class="level-page">
+  <div class="level-header">
+    <a href="../../levels.html" class="back">← Səviyyələr</a>
+    <h1 id="levelTitle">Level 4.1 — Script Tag Bloklanıb</h1>
+    <span class="tag">BYPASS</span><span class="tag">FILTER</span>
+  </div>
+
+  <div class="sub-nav">
+    <button onclick="showSub('4.1')" id="btn41" class="sub-btn active">4.1</button>
+    <button onclick="showSub('4.2')" id="btn42" class="sub-btn locked" disabled>4.2 🔒</button>
+  </div>
+
+  <div id="sub41" class="sub-level">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 4.1</h3>
+      <p><code>&lt;script&gt;</code> bloklanıb. Başqa tag ilə bypass et.</p>
+    </div>
+    <div class="playground">
+      <input id="bp1" placeholder="Payload yaz...">
+      <button onclick="runBP1()">Göndər</button>
+      <div class="output" style="margin-top:15px">
+        <div class="output-label">NƏTİCƏ:</div>
+        <div id="bp1Out">Gözləyir...</div>
+      </div>
+    </div>
+    <details class="hint-box">
+      <summary>💡 İpucu</summary>
+      <p><code>&lt;img src=x onerror=alert(1)&gt;</code> və ya <code>&lt;svg onload=alert(1)&gt;</code></p>
+    </details>
+  </div>
+
+  <div id="sub42" class="sub-level" style="display:none">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 4.2</h3>
+      <p>Çoxsaylı filter-ləri bypass et</p>
+    </div>
+    <div class="playground">
+      <input id="bp2" placeholder="Payload yaz...">
+      <button onclick="runBP2()">Göndər</button>
+      <div class="output" style="margin-top:15px">
+        <div class="output-label">NƏTİCƏ:</div>
+        <div id="bp2Out">Gözləyir...</div>
+      </div>
+    </div>
+    <details class="hint-box">
+      <summary>💡 İpucu</summary>
+      <p><code>&lt;svg/onload=alert(1)&gt;</code> və ya boşluq istifadə et</p>
+    </details>
+  </div>
+</div>
+
+<style>
+.sub-nav{margin:20px 0;padding:15px;background:rgba(0,255,156,.05);border-radius:8px;text-align:center}
+.sub-btn{background:rgba(0,255,156,.1);border:1px solid var(--neon);color:var(--neon);padding:10px 25px;border-radius:6px;cursor:pointer;margin:0 10px;font-size:1rem;transition:.3s}
+.sub-btn:hover:not(:disabled),.sub-btn.active{background:var(--neon);color:#000}
+.sub-btn:disabled{opacity:.3;cursor:not-allowed;border-color:var(--muted);color:var(--muted)}
+.sub-level{animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+<script src="../../shared/utils.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

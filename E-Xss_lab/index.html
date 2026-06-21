@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XSS Lab | Eldaniz Ibrahimli</title>
+<style>
+:root{
+  --bg-primary:#0f172a;
+  --bg-secondary:#1e293b;
+  --accent-primary:#10b981;
+  --accent-secondary:#34d399;
+  --text-primary:#f1f5f9;
+  --text-secondary:#94a3b8;
+  --danger:#ef4444;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg-primary);
+  color:var(--text-primary);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+}
+
+.container{
+  max-width:900px;
+  width:100%;
+  text-align:center;
+}
+
+.logo{
+  margin-bottom:3rem;
+}
+
+.logo .bracket{
+  color:var(--accent-primary);
+  font-size:3rem;
+  font-weight:bold;
+  text-shadow:0 0 20px rgba(16,185,129,0.5);
+}
+
+.logo h1{
+  font-size:4rem;
+  margin:1rem 0;
+  background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:4px;
+}
+
+.subtitle{
+  color:var(--text-secondary);
+  font-size:1.1rem;
+  letter-spacing:2px;
+}
+
+.entry-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2rem;
+  margin-bottom:3rem;
+}
+
+.entry-card{
+  background:var(--bg-secondary);
+  border:2px solid var(--accent-primary);
+  border-radius:16px;
+  padding:2.5rem 2rem;
+  text-decoration:none;
+  color:var(--text-primary);
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  display:block;
+}
+
+.entry-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 40px rgba(16,185,129,0.3);
+  border-color:var(--accent-secondary);
+}
+
+.entry-card.locked{
+  border-color:var(--danger);
+  opacity:0.7;
+  cursor:not-allowed;
+}
+
+.entry-card.locked:hover{
+  transform:none;
+  box-shadow:none;
+}
+
+.entry-card .icon{
+  font-size:3.5rem;
+  margin-bottom:1rem;
+}
+
+.entry-card h2{
+  font-size:1.75rem;
+  margin-bottom:0.75rem;
+  color:var(--accent-primary);
+  letter-spacing:2px;
+}
+
+.entry-card.locked h2{
+  color:var(--danger);
+}
+
+.entry-card p{
+  color:var(--text-secondary);
+  margin-bottom:1.5rem;
+  font-size:0.95rem;
+}
+
+.entry-card .enter{
+  display:inline-block;
+  padding:0.75rem 2rem;
+  background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));
+  color:var(--bg-primary);
+  border-radius:8px;
+  font-weight:600;
+  letter-spacing:1px;
+  transition:all 0.3s;
+}
+
+.entry-card:hover .enter{
+  box-shadow:0 5px 15px rgba(16,185,129,0.4);
+}
+
+.entry-card.locked .enter{
+  background:var(--danger);
+  color:white;
+}
+
+.credit{
+  color:var(--text-secondary);
+  font-size:0.9rem;
+  margin-top:3rem;
+}
+
+.credit .author{
+  color:var(--accent-primary);
+  font-weight:600;
+}
+
+@media(max-width:768px){
+  .entry-options{
+    grid-template-columns:1fr;
+  }
+  
+  .logo h1{
+    font-size:2.5rem;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <div><span class="bracket">&lt;</span>XSS<span class="bracket">/&gt;</span></div>
+      <h1>XSS LAB</h1>
+      <p class="subtitle">Təlim Məqsədli Təhlükəsizlik Laboratoriyası</p>
+    </div>
+
+    <div class="entry-options">
+      <a href="levels.html" class="entry-card">
+        <div class="icon">🎯</div>
+        <h2>LABORATORIYA</h2>
+        <p>XSS hücumlarını öyrən və tətbiq et</p>
+        <span class="enter">DAXİL OL →</span>
+      </a>
+
+      <a href="#" id="finishCard" class="entry-card locked">
+        <div class="icon">🏆</div>
+        <h2>FİNAL</h2>
+        <p id="finishDesc">Bütün səviyyələri bitirdikdən sonra bura gəl</p>
+        <span class="enter" id="finishEnter">🔒 KİLİDLİ</span>
+      </a>
+    </div>
+
+    <footer class="credit">
+      Created by <span class="author">Eldaniz Ibrahimli</span> · 2026
+    </footer>
+  </div>
+
+  <script src="shared/utils.js"></script>
+  <script>
+    const LEVELS = [
+      {id:'level1-reflected', name:'Level 1', title:'Reflected XSS', subs:['1.1','1.2']},
+      {id:'level2-stored',    name:'Level 2', title:'Stored XSS',    subs:['2.1','2.2']},
+      {id:'level3-dom',       name:'Level 3', title:'DOM XSS',       subs:['3.1','3.2']},
+      {id:'level4-filter',    name:'Level 4', title:'Filter Bypass', subs:['4.1','4.2']}
+    ];
+
+    function getCompleted(){
+      try{return JSON.parse(localStorage.getItem('xss_completed')||'[]')}catch(e){return []}
+    }
+    function isCompleted(id){return getCompleted().includes(id)}
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      const allDone = LEVELS.every(l=>l.subs.every(s=>isCompleted(s)));
+      const card=document.getElementById('finishCard');
+      const desc=document.getElementById('finishDesc');
+      const enter=document.getElementById('finishEnter');
+      
+      if(allDone){
+        card.classList.remove('locked');
+        card.href='finish.html';
+        desc.textContent='Təbriklər! Bütün səviyyələri bitirdin. Finala keç.';
+        enter.textContent='FİNALA KEÇ →';
+      }else{
+        card.onclick=e=>{
+          e.preventDefault();
+          alert('⛔ Bütün səviyyələri bitirməlisən əvvəlcə!');
+        };
+      }
+    });
+  </script>
+</body>
+</html>

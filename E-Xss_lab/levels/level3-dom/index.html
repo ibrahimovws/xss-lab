@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<title>Level 3 | DOM XSS</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+<div class="level-page">
+  <div class="level-header">
+    <a href="../../levels.html" class="back">← Səviyyələr</a>
+    <h1 id="levelTitle">Level 3.1 — Hash DOM XSS</h1>
+    <span class="tag">DOM</span><span class="tag">HASH</span>
+  </div>
+
+  <div class="sub-nav">
+    <button onclick="showSub('3.1')" id="btn31" class="sub-btn active">3.1</button>
+    <button onclick="showSub('3.2')" id="btn32" class="sub-btn locked" disabled>3.2 🔒</button>
+  </div>
+
+  <div id="sub31" class="sub-level">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 3.1</h3>
+      <p>URL hash-dən istifadə et: <code>#PAYLOAD</code></p>
+    </div>
+    <div class="playground">
+      <div class="output">
+        <div class="output-label">HASH DƏYƏRİ:</div>
+        <div id="hashOut">Hash yoxdur</div>
+      </div>
+      <p style="margin-top:15px;color:var(--muted)">💡 İpucu: URL-in sonuna <code>#&lt;img src=x onerror=alert(1)&gt;</code> əlavə et</p>
+    </div>
+  </div>
+
+  <div id="sub32" class="sub-level" style="display:none">
+    <div class="task-box">
+      <h3>🎯 Vəzifə 3.2</h3>
+      <p>document.write ilə XSS</p>
+    </div>
+    <div class="playground">
+      <input id="dwInput" placeholder="Yaz...">
+      <button onclick="runWrite()">İcra et</button>
+      <div id="dwOut" style="margin-top:15px;min-height:100px;border:1px dashed var(--muted);padding:15px;border-radius:4px"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.sub-nav{margin:20px 0;padding:15px;background:rgba(0,255,156,.05);border-radius:8px;text-align:center}
+.sub-btn{background:rgba(0,255,156,.1);border:1px solid var(--neon);color:var(--neon);padding:10px 25px;border-radius:6px;cursor:pointer;margin:0 10px;font-size:1rem;transition:.3s}
+.sub-btn:hover:not(:disabled),.sub-btn.active{background:var(--neon);color:#000}
+.sub-btn:disabled{opacity:.3;cursor:not-allowed;border-color:var(--muted);color:var(--muted)}
+.sub-level{animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+<script src="../../shared/utils.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
